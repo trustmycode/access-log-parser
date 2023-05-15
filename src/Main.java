@@ -16,7 +16,7 @@ public class Main {
                 continue;
             } else {
                 System.out.println("Путь указан верно");
-                System.out.println("Это файл номер " + count + "\na");
+                System.out.println("Это файл номер " + count + "\n");
                 count++;
             }
         }
