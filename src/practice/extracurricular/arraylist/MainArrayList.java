@@ -5,9 +5,6 @@ import java.util.ArrayList;
 public class MainArrayList {
 
   public static void main(String[] args) {
-    ArrayList<Object> arrayList = new ArrayList<>();
-    arrayList.add(2);
-    System.out.println(arrayList.remove(2));
     MyArrayList myArrayList = new MyArrayList();
     System.out.println(myArrayList.isEmpty());
     myArrayList.add(2);
