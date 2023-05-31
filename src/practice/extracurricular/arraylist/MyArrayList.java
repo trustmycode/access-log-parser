@@ -15,10 +15,10 @@ public class MyArrayList {
   @Override
   public String toString() {
     StringBuilder stringBuilder = new StringBuilder("[");
-    for (int i = 0; i < array.length; i++) {
+    for (int i = 0; i < size; i++) {
       if (array[i] == null) {
         break;
-      } else if (i == array.length - 1 || array[i + 1] == null) {
+      } else if (i == size - 1 || array[i + 1] == null) {
         stringBuilder.append(array[i]);
         break;
       }
@@ -34,8 +34,17 @@ public class MyArrayList {
       capacity *= 2;
       array = Arrays.copyOf(array, capacity);
     }
-    array[size] = key;
-    size++;
+    if (!this.isEmpty()) {
+      if (key.getClass() == array[0].getClass()) {
+        array[size++] = key;
+      } else {
+        throw new FormatException(
+            "The format of the " + array[0].getClass() + " and the passed " + key.getClass()
+                + " argument do not match");
+      }
+    } else {
+      array[size++] = key;
+    }
   }
 
   public boolean contains(Object key) {
@@ -82,18 +91,29 @@ public class MyArrayList {
 
   private void removeObj(Object[] array, int i) {
     int j;
-    if (i == array.length - 1) {
+    if (i == size - 1) {
       this.array[i] = null;
       size--;
     } else {
       j = i + 1;
-      for (; i < array.length - 1; i++, j++) {
+      for (; i < size - 1; i++, j++) {
         this.array[i] = this.array[j];
-        if (i == array.length - 2) {
+        if (i == size - 2) {
           this.array[j] = null;
           size--;
         }
       }
     }
+  }
+}
+
+class FormatException extends RuntimeException {
+
+  public FormatException() {
+    super();
+  }
+
+  public FormatException(String s) {
+    super(s);
   }
 }
