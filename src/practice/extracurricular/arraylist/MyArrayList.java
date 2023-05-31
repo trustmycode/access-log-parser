@@ -4,11 +4,13 @@ import java.util.Arrays;
 
 public class MyArrayList {
 
+  private final Class clazz;
   private Object[] array;
   private int size = 0;
   private int capacity = 10;
 
-  public MyArrayList() {
+  public MyArrayList(Class clazz) {
+    this.clazz = clazz;
     array = new Object[capacity];
   }
 
@@ -16,9 +18,7 @@ public class MyArrayList {
   public String toString() {
     StringBuilder stringBuilder = new StringBuilder("[");
     for (int i = 0; i < size; i++) {
-      if (array[i] == null) {
-        break;
-      } else if (i == size - 1 || array[i + 1] == null) {
+      if (i == size - 1) {
         stringBuilder.append(array[i]);
         break;
       }
@@ -34,16 +34,16 @@ public class MyArrayList {
       capacity *= 2;
       array = Arrays.copyOf(array, capacity);
     }
-    if (!this.isEmpty()) {
-      if (key.getClass() == array[0].getClass()) {
+    if (key != null) {
+      if (key.getClass() == clazz) {
         array[size++] = key;
       } else {
         throw new FormatException(
-            "The format of the " + array[0].getClass() + " and the passed " + key.getClass()
+            "The format of the " + clazz + " and the passed " + key.getClass()
                 + " argument do not match");
       }
     } else {
-      array[size++] = key;
+      throw new IllegalArgumentException("Key cannot be null");
     }
   }
 
@@ -70,7 +70,7 @@ public class MyArrayList {
   public Object remove(int index) {
     if (index < size && index >= 0) {
       Object tmp = this.array[index];
-      removeObj(this.array, index);
+      removeObj(index);
       return tmp;
     }
     throw new ArrayIndexOutOfBoundsException(
@@ -89,7 +89,7 @@ public class MyArrayList {
 //    return false;
 //  }
 
-  private void removeObj(Object[] array, int i) {
+  private void removeObj(int i) {
     int j;
     if (i == size - 1) {
       this.array[i] = null;
