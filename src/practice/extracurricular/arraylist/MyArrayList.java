@@ -59,20 +59,11 @@ public class MyArrayList {
   }
 
   public boolean isEmpty() {
-    for (Object o : array) {
-      if (o != null) {
-        return false;
-      }
-    }
-    return true;
+    return k == 0;
   }
 
   public int size() {
-    if (isEmpty()) {
-      return 0;
-    } else {
       return k;
-    }
   }
 
   private void removeObj(Object[] array, int i) {
