@@ -81,16 +81,19 @@ public class MyArrayList {
 //  }
 
   private void removeObj(Object[] array, int i) {
-    Object[] bufArray = Arrays.copyOfRange(array, i + 1, size);
-    if (i == 0) {
-      this.array = bufArray;
-    } else {
-      int j = 0;
-      for (; j < bufArray.length; i++, j++) {
-        this.array[i] = bufArray[j];
-      }
+    int j;
+    if (i == array.length - 1) {
+      this.array[i] = null;
       size--;
-      this.array = Arrays.copyOf(this.array, size);
+    } else {
+      j = i + 1;
+      for (; i < array.length - 1; i++, j++) {
+        this.array[i] = this.array[j];
+        if (i == array.length - 2) {
+          this.array[j] = null;
+          size--;
+        }
+      }
     }
   }
 }
