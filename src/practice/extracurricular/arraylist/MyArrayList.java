@@ -1,6 +1,7 @@
 package practice.extracurricular.arraylist;
 
 import java.util.Arrays;
+import practice.exception.FormatException;
 
 public class MyArrayList {
 
@@ -104,16 +105,5 @@ public class MyArrayList {
         }
       }
     }
-  }
-}
-
-class FormatException extends RuntimeException {
-
-  public FormatException() {
-    super();
-  }
-
-  public FormatException(String s) {
-    super(s);
   }
 }
