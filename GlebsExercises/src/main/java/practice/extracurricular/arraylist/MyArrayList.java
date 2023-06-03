@@ -1,7 +1,7 @@
 package practice.extracurricular.arraylist;
 
 import java.util.Arrays;
-import practice.exception.FormatException;
+import practice.extracurricular.exception.FormatException;
 
 public class MyArrayList {
 
