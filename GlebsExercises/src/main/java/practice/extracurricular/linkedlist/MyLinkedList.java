@@ -29,6 +29,29 @@ public class MyLinkedList {
     return stringBuilder.append("]").toString();
   }
 
+  public void add(Object element) {
+    if (element.getClass() == listType) {
+      addLast(element);
+    } else {
+      throw new FormatException(formatExceptionMsg(element));
+    }
+  }
+
+  public void add(int index, Object element) {
+    if (element.getClass() == listType) {
+      if (index == 0) {
+        addFirst(element);
+      } else if (index == size) {
+        addLast(element);
+      } else {
+        addLink(index, element);
+        size++;
+      }
+    } else {
+      throw new FormatException(formatExceptionMsg(element));
+    }
+  }
+
   public void addFirst(Object element) {
     if (element.getClass() == listType) {
       MyLinkedListNode newNode = head;
@@ -42,11 +65,6 @@ public class MyLinkedList {
     } else {
       throw new FormatException(formatExceptionMsg(element));
     }
-  }
-
-  private String formatExceptionMsg(Object element) {
-    return "The format of the " + listType + " and the passed " + element.getClass()
-        + " argument do not match";
   }
 
   public void addLast(Object element) {
@@ -64,69 +82,17 @@ public class MyLinkedList {
     }
   }
 
-  public void add(Object element) {
-    if (element.getClass() == listType) {
-      addLast(element);
-    } else {
-      throw new FormatException(formatExceptionMsg(element));
-    }
-  }
-
-  public void add(int index, Object element) {
-    if (element.getClass() == listType) {
-      if (index == 0) {
-        addFirst(element);
-      } else if (index == size) {
-        addLast(element);
-      } else {
-        addLink(index, element);
-      }
-    } else {
-      throw new FormatException(formatExceptionMsg(element));
-    }
-  }
-
-  private void addLink(int index, Object element) {
-    MyLinkedListNode current = returnNode(index);
-    MyLinkedListNode newNode = new MyLinkedListNode(element, current.previousElement, current);
-    current.previousElement.nextElement = newNode;
-    current.previousElement = newNode;
-  }
-
   public void remove(int index) {
     if (index == 0) {
       removeFirst();
+      size--;
     } else if (index == size - 1) {
       removeLast();
+      size--;
     } else {
       deleteLink(index);
+      size--;
     }
-  }
-
-  private void deleteLink(int index) {
-    MyLinkedListNode current = returnNode(index);
-    current.nextElement.previousElement = current.previousElement;
-    current.previousElement.nextElement = current.nextElement;
-  }
-
-  private MyLinkedListNode searchDown(int index) {
-    MyLinkedListNode current;
-    current = tail;
-    while (index != size - 2) {
-      current = current.previousElement;
-      index += 1;
-    }
-    return current;
-  }
-
-  private MyLinkedListNode searchUp(int index) {
-    MyLinkedListNode current;
-    current = head;
-    while (index != 0) {
-      current = current.nextElement;
-      index -= 1;
-    }
-    return current;
   }
 
   public void removeLast() {
@@ -140,7 +106,7 @@ public class MyLinkedList {
   }
 
   public boolean isEmpty() {
-    return head == null;
+    return size() == 0;
   }
 
   public int size() {
@@ -148,16 +114,24 @@ public class MyLinkedList {
   }
 
   public Object get(int index) {
-    if (index == 0) {
-      return head.element;
-    } else if (index == size - 1) {
-      return tail.element;
-    }
     return returnNode(index).element;
   }
 
+  private void addLink(int index, Object element) {
+    MyLinkedListNode current = returnNode(index);
+    MyLinkedListNode newNode = new MyLinkedListNode(element, current.previousElement, current);
+    current.previousElement.nextElement = newNode;
+    current.previousElement = newNode;
+  }
+
+  private void deleteLink(int index) {
+    MyLinkedListNode current = returnNode(index);
+    current.nextElement.previousElement = current.previousElement;
+    current.previousElement.nextElement = current.nextElement;
+  }
+
   private MyLinkedListNode returnNode(int index) {
-    if (index > 0 && index < size) {
+    if (index >= 0 && index <= size - 1) {
       if (index <= size / 2) {
         return searchUp(index);
       } else if (index > size / 2) {
@@ -165,6 +139,31 @@ public class MyLinkedList {
       }
     }
     throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+  }
+
+  private MyLinkedListNode searchDown(int index) {
+    MyLinkedListNode current;
+    current = tail;
+    while (index < size - 2) {
+      current = current.previousElement;
+      index += 1;
+    }
+    return current;
+  }
+
+  private MyLinkedListNode searchUp(int index) {
+    MyLinkedListNode current;
+    current = head;
+    while (index > 0) {
+      current = current.nextElement;
+      index -= 1;
+    }
+    return current;
+  }
+
+  private String formatExceptionMsg(Object element) {
+    return "The format of the " + listType + " and the passed " + element.getClass()
+        + " argument do not match";
   }
 
   private static class MyLinkedListNode {

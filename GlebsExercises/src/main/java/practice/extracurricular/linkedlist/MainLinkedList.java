@@ -12,14 +12,19 @@ public class MainLinkedList {
     System.out.println(myLinkedList);
     myLinkedList.addFirst(3);
     myLinkedList.addFirst(2);
-    myLinkedList.addFirst(9);
-    myLinkedList.addFirst(4);
+    myLinkedList.addLast(9);
+    myLinkedList.add(4);
     myLinkedList.addFirst(10);
     System.out.println(myLinkedList);
-    myLinkedList.add(0, 11);
+    myLinkedList.add(3, 11);
     System.out.println(myLinkedList);
+    myLinkedList.add(4, 16);
+    System.out.println(myLinkedList);
+    myLinkedList.add(8, 11);
+    System.out.println(myLinkedList);
+    System.out.println(myLinkedList.size());
     myLinkedList.remove(1);
-    System.out.println(myLinkedList);
+    System.out.println(myLinkedList.size());
     System.out.println(myLinkedList.get(4));
   }
 }
