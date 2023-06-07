@@ -1,4 +1,4 @@
-package practice.exception;
+package practice.extracurricular.exception;
 
 
 public class FormatException extends RuntimeException {
