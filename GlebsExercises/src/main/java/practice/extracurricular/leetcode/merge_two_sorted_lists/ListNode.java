@@ -20,12 +20,14 @@ public class ListNode {
 
   @Override
   public String toString() {
-    return "ListNode{" +
-        "val=" + val +
-        ", next=" + next +
-        '}';
+    StringBuilder stringBuilder = new StringBuilder();
+    if (next != null) {
+      stringBuilder.append(val).append(", ").append(next);
+    } else {
+      stringBuilder.append(val);
+    }
+    return stringBuilder.toString();
   }
-
 }
 
 class Main {
