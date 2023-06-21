@@ -14,10 +14,6 @@ public class MyLinkedList {
     this.listType = listType;
   }
 
-  private static String getKeyCannotBeNull() {
-    return "Key cannot be null";
-  }
-
   @Override
   public String toString() {
     MyLinkedListNode current = head;
@@ -218,6 +214,10 @@ public class MyLinkedList {
   private String formatExceptionMsg(Object element) {
     return "The format of the " + listType + " and the passed " + element.getClass()
         + " argument do not match";
+  }
+
+  private String getKeyCannotBeNull() {
+    return "Key cannot be null";
   }
 
   private static class MyLinkedListNode {
