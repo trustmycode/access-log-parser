@@ -31,12 +31,12 @@ public class MyArrayList {
   }
 
   public void add(Object key) {
-    if (size == array.length) {
-      capacity *= 2;
-      array = Arrays.copyOf(array, capacity);
-    }
     if (key != null) {
       if (key.getClass() == clazz) {
+        if (size == array.length) {
+          capacity *= 2;
+          array = Arrays.copyOf(array, capacity);
+        }
         array[size++] = key;
       } else {
         throw new FormatException(

@@ -5,9 +5,9 @@ import java.util.LinkedList;
 public class MainLinkedList {
 
   public static void main(String[] args) {
-    LinkedList list = new LinkedList();
-    System.out.println(list);
     MyLinkedList myLinkedList = new MyLinkedList(Integer.class);
+    System.out.println(myLinkedList);
+    myLinkedList.removeLast();
     myLinkedList.add(0, 1);
     System.out.println(myLinkedList);
     myLinkedList.addFirst(3);
@@ -23,7 +23,8 @@ public class MainLinkedList {
     myLinkedList.add(8, 11);
     System.out.println(myLinkedList);
     System.out.println(myLinkedList.size());
-    myLinkedList.remove(1);
+    System.out.println(myLinkedList.removeLast());
+    System.out.println(myLinkedList.removeFirst());
     System.out.println(myLinkedList.size());
     System.out.println(myLinkedList.get(4));
   }

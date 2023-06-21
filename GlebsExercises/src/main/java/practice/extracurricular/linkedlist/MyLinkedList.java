@@ -1,5 +1,6 @@
 package practice.extracurricular.linkedlist;
 
+import java.util.NoSuchElementException;
 import practice.extracurricular.exception.FormatException;
 
 public class MyLinkedList {
@@ -17,7 +18,7 @@ public class MyLinkedList {
   public String toString() {
     MyLinkedListNode current = head;
     StringBuilder stringBuilder = new StringBuilder("[");
-    while (true) {
+    while (current != null) {
       if (current.nextElement == null) {
         stringBuilder.append(current.element);
         break;
@@ -29,80 +30,120 @@ public class MyLinkedList {
     return stringBuilder.append("]").toString();
   }
 
-  public void add(Object element) {
-    if (element.getClass() == listType) {
-      addLast(element);
-    } else {
-      throw new FormatException(formatExceptionMsg(element));
-    }
-  }
-
-  public void add(int index, Object element) {
-    if (element.getClass() == listType) {
-      if (index == 0) {
-        addFirst(element);
-      } else if (index == size) {
+  public boolean add(Object element) {
+    if (element != null) {
+      if (element.getClass() == listType) {
         addLast(element);
+        return true;
       } else {
-        addLink(index, element);
+        throw new FormatException(formatExceptionMsg(element));
+      }
+    } else {
+      throw new IllegalArgumentException(getKeyCannotBeNull());
+    }
+  }
+
+  public boolean add(int index, Object element) {
+    if (element != null) {
+      if (index <= size && index >= 0) {
+        if (element.getClass() == listType) {
+          if (index == 0) {
+            addFirst(element);
+            return true;
+          } else if (index == size) {
+            addLast(element);
+            return true;
+          } else {
+            addLink(index, element);
+            size++;
+            return true;
+          }
+        } else {
+          throw new FormatException(formatExceptionMsg(element));
+        }
+      }
+    } else {
+      throw new IllegalArgumentException(getKeyCannotBeNull());
+    }
+    throw new ArrayIndexOutOfBoundsException(
+        "Index " + index + " out of bounds for length " + size);
+  }
+
+  public boolean addFirst(Object element) {
+    if (element != null) {
+      if (element.getClass() == listType) {
+        MyLinkedListNode newNode = head;
+        head = new MyLinkedListNode(element, null, head);
+        if (newNode == null) {
+          tail = head;
+        } else {
+          newNode.previousElement = head;
+        }
         size++;
-      }
-    } else {
-      throw new FormatException(formatExceptionMsg(element));
-    }
-  }
-
-  public void addFirst(Object element) {
-    if (element.getClass() == listType) {
-      MyLinkedListNode newNode = head;
-      head = new MyLinkedListNode(element, null, head);
-      if (newNode == null) {
-        tail = head;
+        return true;
       } else {
-        newNode.previousElement = head;
+        throw new FormatException(formatExceptionMsg(element));
       }
-      size++;
     } else {
-      throw new FormatException(formatExceptionMsg(element));
+      throw new IllegalArgumentException(getKeyCannotBeNull());
     }
   }
 
-  public void addLast(Object element) {
-    if (element.getClass() == listType) {
+  public boolean addLast(Object element) {
+    if (element != null) {
+      if (element.getClass() == listType) {
+        MyLinkedListNode current = tail;
+        tail = new MyLinkedListNode(element, tail, null);
+        if (current == null) {
+          head = tail;
+        } else {
+          current.nextElement = tail;
+        }
+        size++;
+        return true;
+      } else {
+        throw new FormatException(formatExceptionMsg(element));
+      }
+    } else {
+      throw new IllegalArgumentException(getKeyCannotBeNull());
+    }
+  }
+
+  public Object remove(int index) {
+    if (index < size && index >= 0) {
+      if (index == 0) {
+        return removeFirst();
+      } else if (index == size - 1) {
+        return removeLast();
+      } else {
+        size--;
+        return deleteLink(index);
+      }
+    }
+    throw new ArrayIndexOutOfBoundsException(
+        "Index " + index + " out of bounds for length " + size);
+  }
+
+  public Object removeLast() {
+    if (!isEmpty()) {
       MyLinkedListNode current = tail;
-      tail = new MyLinkedListNode(element, tail, null);
-      if (current == null) {
-        head = tail;
-      } else {
-        current.nextElement = tail;
-      }
-      size++;
-    } else {
-      throw new FormatException(formatExceptionMsg(element));
+      tail.previousElement.nextElement = null;
+      tail = tail.previousElement;
+      size--;
+      return current.element;
     }
+    throw new NoSuchElementException("List is empty");
   }
 
-  public void remove(int index) {
-    if (index == 0) {
-      removeFirst();
+  public Object removeFirst() {
+    if (!isEmpty()) {
+      MyLinkedListNode current = head;
+      head.nextElement.previousElement = null;
+      head = head.nextElement;
       size--;
-    } else if (index == size - 1) {
-      removeLast();
-      size--;
-    } else {
-      deleteLink(index);
-      size--;
+      return current.element;
     }
-  }
-
-  public void removeLast() {
-    tail.previousElement.nextElement = null;
-    tail = tail.previousElement;
-  }
-
-  public void removeFirst() {
-    head.nextElement.previousElement = null;
-    head = head.nextElement;
+    throw new NoSuchElementException("List is empty");
   }
 
   public boolean isEmpty() {
@@ -114,7 +155,14 @@ public class MyLinkedList {
   }
 
   public Object get(int index) {
-    return returnNode(index).element;
+    if (head == null) {
+      throw new NoSuchElementException("List is empty");
+    }
+    if (index < size && index >= 0) {
+      return returnNode(index).element;
+    }
+    throw new ArrayIndexOutOfBoundsException(
+        "Index " + index + " out of bounds for length " + size);
   }
 
   private void addLink(int index, Object element) {
@@ -124,10 +172,12 @@ public class MyLinkedList {
     current.previousElement = newNode;
   }
 
-  private void deleteLink(int index) {
+  private Object deleteLink(int index) {
     MyLinkedListNode current = returnNode(index);
+    MyLinkedListNode returnValue = returnNode(index);
     current.nextElement.previousElement = current.previousElement;
     current.previousElement.nextElement = current.nextElement;
+    return returnValue.element;
   }
 
   private MyLinkedListNode returnNode(int index) {
@@ -164,6 +214,10 @@ public class MyLinkedList {
   private String formatExceptionMsg(Object element) {
     return "The format of the " + listType + " and the passed " + element.getClass()
         + " argument do not match";
+  }
+
+  private String getKeyCannotBeNull() {
+    return "Key cannot be null";
   }
 
   private static class MyLinkedListNode {
