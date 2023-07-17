@@ -34,7 +34,6 @@ public class MyQueueOnArray {
         if (size == capacity) {
           capacity *= 2;
           elementsArray = Arrays.copyOf(elementsArray, capacity);
-          lastIndex = size;
         }
         if (lastIndex == capacity && size < capacity) {
           int j = firstIndex;
