@@ -1,7 +1,6 @@
 package practice.extracurricular.queue;
 
 import java.util.NoSuchElementException;
-import practice.extracurricular.exception.FormatException;
 import practice.extracurricular.linkedlist.MyLinkedList;
 
 public class MyQueue {
@@ -20,29 +19,18 @@ public class MyQueue {
   }
 
   public boolean offer(Object element) {
-    if (element != null) {
-      if (element.getClass() == clazz) {
-        list.add(element);
-        return true;
-      } else {
-        throw new FormatException(
-            "The format of the " + clazz + " and the passed " + element.getClass()
-                + " argument do not match");
-      }
-    } else {
-      throw new IllegalArgumentException("Element cannot be null");
-    }
+    return list.add(element);
   }
 
   public Object poll() {
-    if (list == null) {
+    if (isEmpty()) {
       throw new NoSuchElementException("Queue is empty");
     }
     return list.removeFirst();
   }
 
   public Object peek() {
-    if (list == null) {
+    if (isEmpty()) {
       throw new NoSuchElementException("Queue is empty");
     }
     return list.get(0);

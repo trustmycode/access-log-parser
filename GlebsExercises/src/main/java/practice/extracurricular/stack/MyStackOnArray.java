@@ -1,7 +1,6 @@
 package practice.extracurricular.stack;
 
 import java.util.Arrays;
-import java.util.Stack;
 import practice.extracurricular.exception.FormatException;
 
 public class MyStackOnArray {
@@ -49,10 +48,10 @@ public class MyStackOnArray {
     }
   }
 
-  public void pop() {
-    if (size != 0) {
-      elementsArray[size--] = null;
-    }
+  public Object pop() {
+    Object tmp = elementsArray[size - 1];
+    elementsArray[--size] = null;
+    return tmp;
   }
 
   public int size() {
@@ -70,18 +69,18 @@ public class MyStackOnArray {
   static class Main {
 
     public static void main(String[] args) {
-      Stack<Integer> stack = new Stack<>();
-      stack.push(1);
-      stack.push(2);
-      stack.push(3);
-      stack.push(4);
-      System.out.println(stack.size());
-      System.out.println(stack);
-      System.out.println(stack.peek());
-      stack.pop();
-      System.out.println(stack.size());
-      System.out.println(stack);
-      System.out.println(stack.peek());
+//      Stack<Integer> stack = new Stack<>();
+//      stack.push(1);
+//      stack.push(2);
+//      stack.push(3);
+//      stack.push(4);
+//      System.out.println(stack.size());
+//      System.out.println(stack);
+//      System.out.println(stack.peek());
+//      stack.pop();
+//      System.out.println(stack.size());
+//      System.out.println(stack);
+//      System.out.println(stack.peek());
       MyStackOnArray myStack = new MyStackOnArray(Integer.class);
       myStack.push(1);
       myStack.push(2);
@@ -89,11 +88,12 @@ public class MyStackOnArray {
       myStack.push(4);
       System.out.println(myStack.size());
       System.out.println(myStack);
-      System.out.println(myStack.peek());
-      myStack.pop();
+      System.out.println(myStack.pop());
+      System.out.println(myStack.pop());
+      System.out.println(myStack.pop());
+      System.out.println(myStack.pop());
       System.out.println(myStack.size());
       System.out.println(myStack);
-      System.out.println(myStack.peek());
     }
   }
 }
