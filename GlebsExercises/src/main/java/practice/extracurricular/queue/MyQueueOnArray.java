@@ -11,7 +11,7 @@ public class MyQueueOnArray {
   private int capacity = 5;
   private int size = 0;
   private int firstIndex = 0;
-  private int lastIndex = 0;
+  private int lastIndex = -1;
 
   public MyQueueOnArray(Class clazz) {
     this.clazz = clazz;
@@ -21,10 +21,23 @@ public class MyQueueOnArray {
   @Override
   public String toString() {
     StringBuilder stringBuilder = new StringBuilder("[");
-    for (int i = firstIndex; i < lastIndex - 1; i++) {
-      stringBuilder.append(elementsArray[i]).append(", ");
+    if (lastIndex != firstIndex) {
+      if (lastIndex < firstIndex) {
+        for (int i = firstIndex; i < elementsArray.length; i++) {
+          stringBuilder.append(elementsArray[i]).append(", ");
+        }
+        for (int i = 0; i < lastIndex; i++) {
+          stringBuilder.append(elementsArray[i]).append(", ");
+        }
+      } else {
+        for (int i = 0; i < elementsArray.length - 1; i++) {
+          if (elementsArray[i] != null) {
+            stringBuilder.append(elementsArray[i]).append(", ");
+          }
+        }
+      }
     }
-    stringBuilder.append(elementsArray[lastIndex - 1]).append("]");
+    stringBuilder.append(elementsArray[lastIndex]).append("]");
     return stringBuilder.toString();
   }
 
@@ -32,32 +45,25 @@ public class MyQueueOnArray {
     if (element != null) {
       if (element.getClass() == clazz) {
         if (size == capacity) {
+          if (lastIndex < firstIndex) {
+            queueSort();
+          }
           capacity *= 2;
           elementsArray = Arrays.copyOf(elementsArray, capacity);
         }
-        if (lastIndex == capacity && size < capacity) {
-          int j = firstIndex;
-          for (int i = 0; j < lastIndex; i++, j++) {
-            if (i < lastIndex - firstIndex) {
-              elementsArray[i] = elementsArray[j];
-            } else {
-              elementsArray[i] = null;
-            }
-          }
-          lastIndex = lastIndex - firstIndex;
-          firstIndex = 0;
-        }
-        elementsArray[lastIndex++] = element;
-        size++;
-        return true;
-      } else {
-        throw new FormatException(
-            "The format of the " + clazz + " and the passed " + element.getClass()
-                + " argument do not match");
       }
+      if (lastIndex == capacity - 1 && size < capacity) {
+        lastIndex = -1;
+      }
+      elementsArray[++lastIndex] = element;
+      size++;
+      return true;
     } else {
-      throw new IllegalArgumentException("Element cannot be null");
+      throw new FormatException(
+          "The format of the " + clazz + " and the passed " + element.getClass()
+              + " argument do not match");
     }
+
   }
 
   public Object poll() {
@@ -88,12 +94,27 @@ public class MyQueueOnArray {
     return size == 0;
   }
 
+  private void queueSort() {
+    Object[] tmp = Arrays.copyOfRange(elementsArray, 0, firstIndex);
+    int j = firstIndex;
+    for (int i = 0; j < elementsArray.length; i++, j++) {
+      elementsArray[i] = elementsArray[j];
+    }
+    j = 0;
+    for (int i = firstIndex + 1; i < elementsArray.length; i++, j++) {
+      elementsArray[i] = tmp[j];
+    }
+    firstIndex = 0;
+    lastIndex = size - 1;
+  }
+
   static class Main {
 
     public static void main(String[] args) {
       MyQueueOnArray queue = new MyQueueOnArray(String.class);
       System.out.println(queue.size());
       System.out.println(queue.offer("asd"));
+      System.out.println(queue);
       System.out.println(queue.offer("fasd"));
       System.out.println(queue.offer("wads"));
       System.out.println(queue.offer("hytjn"));
