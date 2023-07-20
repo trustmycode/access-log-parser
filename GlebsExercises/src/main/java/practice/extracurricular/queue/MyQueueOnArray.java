@@ -21,21 +21,8 @@ public class MyQueueOnArray {
   @Override
   public String toString() {
     StringBuilder stringBuilder = new StringBuilder("[");
-    if (lastIndex != firstIndex) {
-      if (lastIndex < firstIndex) {
-        for (int i = firstIndex; i < elementsArray.length; i++) {
-          stringBuilder.append(elementsArray[i]).append(", ");
-        }
-        for (int i = 0; i < lastIndex; i++) {
-          stringBuilder.append(elementsArray[i]).append(", ");
-        }
-      } else {
-        for (int i = 0; i < elementsArray.length - 1; i++) {
-          if (elementsArray[i] != null) {
-            stringBuilder.append(elementsArray[i]).append(", ");
-          }
-        }
-      }
+    for (int i = firstIndex; i != lastIndex; i = (i + 1) % elementsArray.length) {
+      stringBuilder.append(elementsArray[i]).append(", ");
     }
     stringBuilder.append(elementsArray[lastIndex]).append("]");
     return stringBuilder.toString();
@@ -45,17 +32,16 @@ public class MyQueueOnArray {
     if (element != null) {
       if (element.getClass() == clazz) {
         if (size == capacity) {
+          capacity *= 2;
           if (lastIndex < firstIndex) {
             queueSort();
+          } else {
+            elementsArray = Arrays.copyOf(elementsArray, capacity);
           }
-          capacity *= 2;
-          elementsArray = Arrays.copyOf(elementsArray, capacity);
         }
       }
-      if (lastIndex == capacity - 1 && size < capacity) {
-        lastIndex = -1;
-      }
-      elementsArray[++lastIndex] = element;
+      lastIndex = (lastIndex + 1) % elementsArray.length;
+      elementsArray[lastIndex] = element;
       size++;
       return true;
     } else {
@@ -95,17 +81,15 @@ public class MyQueueOnArray {
   }
 
   private void queueSort() {
-    Object[] tmp = Arrays.copyOfRange(elementsArray, 0, firstIndex);
-    int j = firstIndex;
-    for (int i = 0; j < elementsArray.length; i++, j++) {
-      elementsArray[i] = elementsArray[j];
+    Object[] tmp = new Object[capacity];
+    int j = 0;
+    for (int i = firstIndex; i != lastIndex; i = (i + 1) % elementsArray.length, j++) {
+      tmp[j] = elementsArray[i];
     }
-    j = 0;
-    for (int i = firstIndex + 1; i < elementsArray.length; i++, j++) {
-      elementsArray[i] = tmp[j];
-    }
-    firstIndex = 0;
+    tmp[j] = elementsArray[lastIndex];
+    elementsArray = tmp;
     lastIndex = size - 1;
+    firstIndex = 0;
   }
 
   static class Main {
