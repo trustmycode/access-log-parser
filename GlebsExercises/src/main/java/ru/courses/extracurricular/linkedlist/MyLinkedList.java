@@ -1,18 +1,15 @@
-package practice.extracurricular.linkedlist;
+package ru.courses.extracurricular.linkedlist;
 
 import java.util.NoSuchElementException;
-import practice.extracurricular.exception.FormatException;
 
-public class MyLinkedList {
+public class MyLinkedList<E> {
 
-  private final Class listType;
   private MyLinkedListNode head;
   private MyLinkedListNode tail;
   private int size;
+  static final String LIST_IS_EMPTY = "List is empty";
+  static final String KEY_CANNOT_BE_NULL = "Key cannot be null";
 
-  public MyLinkedList(Class listType) {
-    this.listType = listType;
-  }
 
   @Override
   public String toString() {
@@ -30,86 +27,70 @@ public class MyLinkedList {
     return stringBuilder.append("]").toString();
   }
 
-  public boolean add(Object element) {
+  public boolean add(E element) {
     if (element != null) {
-      if (element.getClass() == listType) {
-        addLast(element);
-        return true;
-      } else {
-        throw new FormatException(formatExceptionMsg(element));
-      }
+      addLast(element);
+      return true;
     } else {
-      throw new IllegalArgumentException(getKeyCannotBeNull());
+      throw new IllegalArgumentException(KEY_CANNOT_BE_NULL);
     }
   }
 
-  public boolean add(int index, Object element) {
+  public boolean add(int index, E element) {
     if (element != null) {
       if (index <= size && index >= 0) {
-        if (element.getClass() == listType) {
-          if (index == 0) {
-            addFirst(element);
-            return true;
-          } else if (index == size) {
-            addLast(element);
-            return true;
-          } else {
-            addLink(index, element);
-            size++;
-            return true;
-          }
+        if (index == 0) {
+          addFirst(element);
+          return true;
+        } else if (index == size) {
+          addLast(element);
+          return true;
         } else {
-          throw new FormatException(formatExceptionMsg(element));
+          addLink(index, element);
+          size++;
+          return true;
         }
       }
     } else {
-      throw new IllegalArgumentException(getKeyCannotBeNull());
+      throw new IllegalArgumentException(KEY_CANNOT_BE_NULL);
     }
     throw new ArrayIndexOutOfBoundsException(
-        "Index " + index + " out of bounds for length " + size);
+        arrayIndexOutOfBoundsExceptionMsg(index));
   }
 
-  public boolean addFirst(Object element) {
+  public boolean addFirst(E element) {
     if (element != null) {
-      if (element.getClass() == listType) {
-        MyLinkedListNode newNode = head;
-        head = new MyLinkedListNode(element, null, head);
-        if (newNode == null) {
-          tail = head;
-        } else {
-          newNode.previousElement = head;
-        }
-        size++;
-        return true;
+      MyLinkedListNode newNode = head;
+      head = new MyLinkedListNode(element, null, head);
+      if (newNode == null) {
+        tail = head;
       } else {
-        throw new FormatException(formatExceptionMsg(element));
+        newNode.previousElement = head;
       }
+      size++;
+      return true;
     } else {
-      throw new IllegalArgumentException(getKeyCannotBeNull());
+      throw new IllegalArgumentException(KEY_CANNOT_BE_NULL);
     }
   }
 
-  public boolean addLast(Object element) {
+  public boolean addLast(E element) {
     if (element != null) {
-      if (element.getClass() == listType) {
-        MyLinkedListNode current = tail;
-        tail = new MyLinkedListNode(element, tail, null);
-        if (current == null) {
-          head = tail;
-        } else {
-          current.nextElement = tail;
-        }
-        size++;
-        return true;
+      MyLinkedListNode current = tail;
+      tail = new MyLinkedListNode(element, tail, null);
+      if (current == null) {
+        head = tail;
       } else {
-        throw new FormatException(formatExceptionMsg(element));
+        current.nextElement = tail;
       }
+      size++;
+      return true;
     } else {
-      throw new IllegalArgumentException(getKeyCannotBeNull());
+      throw new IllegalArgumentException(KEY_CANNOT_BE_NULL);
     }
   }
 
-  public Object remove(int index) {
+  public E remove(int index) {
     if (index < size && index >= 0) {
       if (index == 0) {
         return removeFirst();
@@ -121,10 +102,10 @@ public class MyLinkedList {
       }
     }
     throw new ArrayIndexOutOfBoundsException(
-        "Index " + index + " out of bounds for length " + size);
+        arrayIndexOutOfBoundsExceptionMsg(index));
   }
 
-  public Object removeLast() {
+  public E removeLast() {
     if (!isEmpty()) {
       MyLinkedListNode current = tail;
       tail.previousElement.nextElement = null;
@@ -132,10 +113,10 @@ public class MyLinkedList {
       size--;
       return current.element;
     }
-    throw new NoSuchElementException("List is empty");
+    throw new NoSuchElementException(LIST_IS_EMPTY);
   }
 
-  public Object removeFirst() {
+  public E removeFirst() {
     if (!isEmpty()) {
       MyLinkedListNode current = head;
       head.nextElement.previousElement = null;
@@ -143,7 +124,7 @@ public class MyLinkedList {
       size--;
       return current.element;
     }
-    throw new NoSuchElementException("List is empty");
+    throw new NoSuchElementException(LIST_IS_EMPTY);
   }
 
   public boolean isEmpty() {
@@ -154,25 +135,29 @@ public class MyLinkedList {
     return size;
   }
 
-  public Object get(int index) {
+  public E get(int index) {
     if (head == null) {
-      throw new NoSuchElementException("List is empty");
+      throw new NoSuchElementException(LIST_IS_EMPTY);
     }
     if (index < size && index >= 0) {
       return returnNode(index).element;
     }
     throw new ArrayIndexOutOfBoundsException(
-        "Index " + index + " out of bounds for length " + size);
+        arrayIndexOutOfBoundsExceptionMsg(index));
   }
 
-  private void addLink(int index, Object element) {
+  private String arrayIndexOutOfBoundsExceptionMsg(int index) {
+    return "Index " + index + " out of bounds for length " + size;
+  }
+
+  private void addLink(int index, E element) {
     MyLinkedListNode current = returnNode(index);
     MyLinkedListNode newNode = new MyLinkedListNode(element, current.previousElement, current);
     current.previousElement.nextElement = newNode;
     current.previousElement = newNode;
   }
 
-  private Object deleteLink(int index) {
+  private E deleteLink(int index) {
     MyLinkedListNode current = returnNode(index);
     MyLinkedListNode returnValue = returnNode(index);
     current.nextElement.previousElement = current.previousElement;
@@ -211,22 +196,14 @@ public class MyLinkedList {
     return current;
   }
 
-  private String formatExceptionMsg(Object element) {
-    return "The format of the " + listType + " and the passed " + element.getClass()
-        + " argument do not match";
-  }
 
-  private String getKeyCannotBeNull() {
-    return "Key cannot be null";
-  }
+  private class MyLinkedListNode {
 
-  private static class MyLinkedListNode {
-
-    Object element;
+    E element;
     MyLinkedListNode nextElement;
     MyLinkedListNode previousElement;
 
-    public MyLinkedListNode(Object element, MyLinkedListNode previousElement,
+    public MyLinkedListNode(E element, MyLinkedListNode previousElement,
         MyLinkedListNode nextElement) {
       this.element = element;
       this.nextElement = nextElement;

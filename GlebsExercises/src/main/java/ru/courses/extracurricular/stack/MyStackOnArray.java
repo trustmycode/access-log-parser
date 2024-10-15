@@ -1,18 +1,15 @@
-package practice.extracurricular.stack;
+package ru.courses.extracurricular.stack;
 
 import java.util.Arrays;
-import practice.extracurricular.exception.FormatException;
 
-public class MyStackOnArray {
+public class MyStackOnArray<T> {
 
-  private Class clazz;
-  private Object[] elementsArray;
+  private T[] elementsArray;
   private int capacity = 5;
   private int size = 0;
 
-  public MyStackOnArray(Class clazz) {
-    this.clazz = clazz;
-    elementsArray = new Object[capacity];
+  public MyStackOnArray() {
+    elementsArray = (T[]) new Object[capacity];
   }
 
   @Override
@@ -30,26 +27,20 @@ public class MyStackOnArray {
     return stringBuilder.toString();
   }
 
-  public void push(Object element) {
+  public void push(T element) {
     if (element != null) {
-      if (element.getClass() == clazz) {
-        if (size == elementsArray.length) {
-          capacity *= 2;
-          elementsArray = Arrays.copyOf(elementsArray, capacity);
-        }
-        elementsArray[size++] = element;
-      } else {
-        throw new FormatException(
-            "The format of the " + clazz + " and the passed " + element.getClass()
-                + " argument do not match");
+      if (size == elementsArray.length) {
+        capacity *= 2;
+        elementsArray = Arrays.copyOf(elementsArray, capacity);
       }
+      elementsArray[size++] = element;
     } else {
       throw new IllegalArgumentException("Element cannot be null");
     }
   }
 
-  public Object pop() {
-    Object tmp = elementsArray[size - 1];
+  public T pop() {
+    T tmp = elementsArray[size - 1];
     elementsArray[--size] = null;
     return tmp;
   }
@@ -62,26 +53,14 @@ public class MyStackOnArray {
     return size == 0;
   }
 
-  public Object peek() {
+  public T peek() {
     return elementsArray[size - 1];
   }
 
   static class Main {
 
     public static void main(String[] args) {
-//      Stack<Integer> stack = new Stack<>();
-//      stack.push(1);
-//      stack.push(2);
-//      stack.push(3);
-//      stack.push(4);
-//      System.out.println(stack.size());
-//      System.out.println(stack);
-//      System.out.println(stack.peek());
-//      stack.pop();
-//      System.out.println(stack.size());
-//      System.out.println(stack);
-//      System.out.println(stack.peek());
-      MyStackOnArray myStack = new MyStackOnArray(Integer.class);
+      MyStackOnArray<Integer> myStack = new MyStackOnArray<>();
       myStack.push(1);
       myStack.push(2);
       myStack.push(3);

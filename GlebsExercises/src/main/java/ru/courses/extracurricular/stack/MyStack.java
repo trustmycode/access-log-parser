@@ -1,16 +1,14 @@
-package practice.extracurricular.stack;
+package ru.courses.extracurricular.stack;
 
 import java.util.NoSuchElementException;
-import practice.extracurricular.linkedlist.MyLinkedList;
+import ru.courses.extracurricular.linkedlist.MyLinkedList;
 
-public class MyStack {
+public class MyStack<E> {
 
-  private final MyLinkedList elementsList;
-  private Class clazz;
+  private final MyLinkedList<E> elementsList;
 
-  public MyStack(Class clazz) {
-    this.clazz = clazz;
-    elementsList = new MyLinkedList(clazz);
+  public MyStack() {
+    elementsList = new MyLinkedList<>();
   }
 
   @Override
@@ -18,11 +16,11 @@ public class MyStack {
     return elementsList.toString();
   }
 
-  public boolean push(Object element) {
+  public boolean push(E element) {
     return elementsList.add(element);
   }
 
-  public Object pop() {
+  public E pop() {
     if (isEmpty()) {
       throw new NoSuchElementException("Stack is empty");
     }
@@ -37,7 +35,7 @@ public class MyStack {
     return elementsList.isEmpty();
   }
 
-  public Object peek() {
+  public E peek() {
     if (isEmpty()) {
       throw new NoSuchElementException("Stack is empty");
     }
@@ -47,7 +45,7 @@ public class MyStack {
   static class Main {
 
     public static void main(String[] args) {
-      MyStack myStack = new MyStack(Integer.class);
+      MyStack<Integer> myStack = new MyStack<>();
       myStack.pop();
       myStack.push(1);
       myStack.push(2);

@@ -1,18 +1,15 @@
-package practice.extracurricular.arraylist;
+package ru.courses.extracurricular.arraylist;
 
 import java.util.Arrays;
-import practice.extracurricular.exception.FormatException;
 
-public class MyArrayList {
+public class MyArrayList<T> {
 
-  private final Class clazz;
-  private Object[] array;
+  private T[] array;
   private int size = 0;
   private int capacity = 10;
 
-  public MyArrayList(Class clazz) {
-    this.clazz = clazz;
-    array = new Object[capacity];
+  public MyArrayList() {
+    array = (T[]) new Object[capacity];
   }
 
   @Override
@@ -30,25 +27,19 @@ public class MyArrayList {
     return stringBuilder.toString();
   }
 
-  public void add(Object key) {
+  public void add(T key) {
     if (key != null) {
-      if (key.getClass() == clazz) {
-        if (size == array.length) {
-          capacity *= 2;
-          array = Arrays.copyOf(array, capacity);
-        }
-        array[size++] = key;
-      } else {
-        throw new FormatException(
-            "The format of the " + clazz + " and the passed " + key.getClass()
-                + " argument do not match");
+      if (size == array.length) {
+        capacity *= 2;
+        array = Arrays.copyOf(array, capacity);
       }
+      array[size++] = key;
     } else {
       throw new IllegalArgumentException("Key cannot be null");
     }
   }
 
-  public boolean contains(Object key) {
+  public boolean contains(T key) {
     if (isEmpty()) {
       return false;
     }
@@ -68,27 +59,15 @@ public class MyArrayList {
     return size;
   }
 
-  public Object remove(int index) {
+  public T remove(int index) {
     if (index < size && index >= 0) {
-      Object tmp = this.array[index];
+      T tmp = this.array[index];
       removeObj(index);
       return tmp;
     }
     throw new ArrayIndexOutOfBoundsException(
         "Index " + index + " out of bounds for length " + size);
   }
-
-//  public boolean remove(Object key) {
-//    if (contains(key)) {
-//      for (int i = 0; i < array.length; i++) {
-//        if (array[i].equals(key)) {
-//          removeObj(array, i);
-//          return true;
-//        }
-//      }
-//    }
-//    return false;
-//  }
 
   private void removeObj(int i) {
     int j;

@@ -1,21 +1,18 @@
-package practice.extracurricular.queue;
+package ru.courses.extracurricular.queue;
 
 import java.util.Arrays;
 import java.util.NoSuchElementException;
-import practice.extracurricular.exception.FormatException;
 
-public class MyQueueOnArray {
+public class MyQueueOnArray<E> {
 
-  Class clazz;
-  private Object[] elementsArray;
+  private E[] elementsArray;
   private int capacity = 5;
   private int size = 0;
   private int firstIndex = 0;
   private int lastIndex = -1;
 
-  public MyQueueOnArray(Class clazz) {
-    this.clazz = clazz;
-    elementsArray = new Object[capacity];
+  public MyQueueOnArray() {
+    elementsArray = (E[]) new Object[capacity];
   }
 
   @Override
@@ -28,16 +25,14 @@ public class MyQueueOnArray {
     return stringBuilder.toString();
   }
 
-  public boolean offer(Object element) {
+  public boolean offer(E element) {
     if (element != null) {
-      if (element.getClass() == clazz) {
-        if (size == capacity) {
-          capacity *= 2;
-          if (lastIndex < firstIndex) {
-            queueSort();
-          } else {
-            elementsArray = Arrays.copyOf(elementsArray, capacity);
-          }
+      if (size == capacity) {
+        capacity *= 2;
+        if (lastIndex < firstIndex) {
+          queueSort();
+        } else {
+          elementsArray = Arrays.copyOf(elementsArray, capacity);
         }
       }
       lastIndex = (lastIndex + 1) % elementsArray.length;
@@ -45,18 +40,15 @@ public class MyQueueOnArray {
       size++;
       return true;
     } else {
-      throw new FormatException(
-          "The format of the " + clazz + " and the passed " + element.getClass()
-              + " argument do not match");
+      throw new IllegalArgumentException("Key cannot be null");
     }
-
   }
 
-  public Object poll() {
+  public E poll() {
     if (isEmpty()) {
       throw new NoSuchElementException("Queue is empty");
     }
-    Object tmp = elementsArray[firstIndex];
+    E tmp = elementsArray[firstIndex];
     if (firstIndex == lastIndex) {
       firstIndex = 0;
     }
@@ -65,7 +57,7 @@ public class MyQueueOnArray {
     return tmp;
   }
 
-  public Object peek() {
+  public E peek() {
     if (isEmpty()) {
       throw new NoSuchElementException("Queue is empty");
     }
@@ -81,7 +73,7 @@ public class MyQueueOnArray {
   }
 
   private void queueSort() {
-    Object[] tmp = new Object[capacity];
+    E[] tmp = (E[]) new Object[capacity];
     int j = 0;
     for (int i = firstIndex; i != lastIndex; i = (i + 1) % elementsArray.length, j++) {
       tmp[j] = elementsArray[i];
@@ -95,7 +87,7 @@ public class MyQueueOnArray {
   static class Main {
 
     public static void main(String[] args) {
-      MyQueueOnArray queue = new MyQueueOnArray(String.class);
+      MyQueueOnArray<String> queue = new MyQueueOnArray<>();
       System.out.println(queue.size());
       System.out.println(queue.offer("asd"));
       System.out.println(queue);

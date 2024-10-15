@@ -1,16 +1,14 @@
-package practice.extracurricular.queue;
+package ru.courses.extracurricular.queue;
 
 import java.util.NoSuchElementException;
-import practice.extracurricular.linkedlist.MyLinkedList;
+import ru.courses.extracurricular.linkedlist.MyLinkedList;
 
-public class MyQueue {
+public class MyQueue<E> {
 
-  MyLinkedList list;
-  Class clazz;
+  MyLinkedList<E> list;
 
-  public MyQueue(Class clazz) {
-    this.clazz = clazz;
-    this.list = new MyLinkedList(clazz);
+  public MyQueue() {
+    this.list = new MyLinkedList<>();
   }
 
   @Override
@@ -18,18 +16,18 @@ public class MyQueue {
     return list.toString();
   }
 
-  public boolean offer(Object element) {
+  public boolean offer(E element) {
     return list.add(element);
   }
 
-  public Object poll() {
+  public E poll() {
     if (isEmpty()) {
       throw new NoSuchElementException("Queue is empty");
     }
     return list.removeFirst();
   }
 
-  public Object peek() {
+  public E peek() {
     if (isEmpty()) {
       throw new NoSuchElementException("Queue is empty");
     }
@@ -47,10 +45,10 @@ public class MyQueue {
   static class Main {
 
     public static void main(String[] args) {
-      MyQueue queue = new MyQueue(String.class);
+      MyQueue<String> queue = new MyQueue<>();
       System.out.println(queue.size());
       System.out.println(queue.offer("asd"));
-      System.out.println(queue.offer("fasd"));
+      System.out.println(queue.offer("a"));
       System.out.println(queue);
       System.out.println(queue.size());
       System.out.println(queue.peek());

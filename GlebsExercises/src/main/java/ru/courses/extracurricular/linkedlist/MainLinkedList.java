@@ -1,11 +1,9 @@
-package practice.extracurricular.linkedlist;
-
-import java.util.LinkedList;
+package ru.courses.extracurricular.linkedlist;
 
 public class MainLinkedList {
 
   public static void main(String[] args) {
-    MyLinkedList myLinkedList = new MyLinkedList(Integer.class);
+    MyLinkedList<Integer> myLinkedList = new MyLinkedList<>();
     System.out.println(myLinkedList);
     myLinkedList.removeLast();
     myLinkedList.add(0, 1);
