@@ -1,4 +1,4 @@
-package practice.oop.demo;
+package practice.oop.demo.stream;
 
 public class Teacher {
     private String name;

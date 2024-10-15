@@ -1,4 +1,4 @@
-package practice.oop.demo;
+package practice.oop.demo.solid;
 // Принцип SRP соблюдён: класс Order отвечает только за логику заказа
 public class Order {
     private String customerName; // Имя клиента

@@ -1,4 +1,4 @@
-package practice.oop.demo;
+package practice.oop.demo.stream;
 
 import java.util.*;
 import java.util.stream.*;

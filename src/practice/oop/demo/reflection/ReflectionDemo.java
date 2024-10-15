@@ -1,4 +1,4 @@
-package practice.oop.demo;
+package practice.oop.demo.reflection;
 
 import java.lang.reflect.*;
 

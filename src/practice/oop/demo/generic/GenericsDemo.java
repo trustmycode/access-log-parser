@@ -1,4 +1,4 @@
-package practice.oop.demo;
+package practice.oop.demo.generic;
 
 import java.util.ArrayList;
 import java.util.List;
