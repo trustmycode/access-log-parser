@@ -1,10 +1,9 @@
 package practice.oop.demo;
-
-// Принцип SRP соблюдён: теперь класс Order отвечает только за логику заказа
+// Принцип SRP соблюдён: класс Order отвечает только за логику заказа
 public class Order {
-    private String customerName;
-    private String product;
-    private double price;
+    private String customerName; // Имя клиента
+    private String product;       // Продукт
+    private double price;         // Цена
 
     public Order(String customerName, String product, double price) {
         this.customerName = customerName;
@@ -25,7 +24,7 @@ public class Order {
     }
 }
 
-// Принцип OCP соблюдён: новый способ уведомления можно добавить без изменения существующего кода
+// Принцип OCP соблюдён: новые способы уведомления можно добавлять без изменения существующего кода
 interface NotificationService {
     void sendNotification(String message, String recipient);
 }
@@ -44,7 +43,7 @@ class SMSNotification implements NotificationService {
     }
 }
 
-// Принцип DIP соблюдён: теперь зависимость на интерфейс, а не на конкретную реализацию
+// Принцип DIP соблюдён: зависимости передаются через интерфейсы
 interface PaymentProcessor {
     void processPayment(double amount);
 }
@@ -64,15 +63,24 @@ class CreditCardPayment implements PaymentProcessor {
 }
 
 // Принцип LSP соблюдён: подклассы могут корректно заменять базовый класс
-class StandardOrderProcessor {
-    private PaymentProcessor paymentProcessor;
-    private NotificationService notificationService;
+abstract class OrderProcessor {
+    protected PaymentProcessor paymentProcessor; // Зависимость от абстракции
+    protected NotificationService notificationService; // Зависимость от абстракции
 
-    public StandardOrderProcessor(PaymentProcessor paymentProcessor, NotificationService notificationService) {
+    public OrderProcessor(PaymentProcessor paymentProcessor, NotificationService notificationService) {
         this.paymentProcessor = paymentProcessor;
         this.notificationService = notificationService;
     }
 
+    public abstract void processOrder(Order order);
+}
+
+class StandardOrderProcessor extends OrderProcessor {
+    public StandardOrderProcessor(PaymentProcessor paymentProcessor, NotificationService notificationService) {
+        super(paymentProcessor, notificationService);
+    }
+
+    @Override
     public void processOrder(Order order) {
         System.out.println("Processing order for " + order.getCustomerName());
         paymentProcessor.processPayment(order.getPrice());
@@ -80,8 +88,7 @@ class StandardOrderProcessor {
     }
 }
 
-// Принцип ISP соблюдён: каждый интерфейс делает только одну задачу
-class SpecialOrderProcessor extends StandardOrderProcessor {
+class SpecialOrderProcessor extends OrderProcessor {
     public SpecialOrderProcessor(PaymentProcessor paymentProcessor, NotificationService notificationService) {
         super(paymentProcessor, notificationService);
     }
@@ -90,5 +97,21 @@ class SpecialOrderProcessor extends StandardOrderProcessor {
     public void processOrder(Order order) {
         // Специфическая логика для особых заказов
         System.out.println("Processing special order for " + order.getCustomerName());
+        paymentProcessor.processPayment(order.getPrice());
+        notificationService.sendNotification("Special order for " + order.getProduct() + " is processed.", order.getCustomerName());
+    }
+}
+
+// Использование классов
+class Main {
+    public static void main(String[] args) {
+        PaymentProcessor paymentProcessor = new PayPalPayment(); // или CreditCardPayment
+        NotificationService notificationService = new EmailNotification(); // или SMSNotification
+
+        OrderProcessor orderProcessor = new StandardOrderProcessor(paymentProcessor, notificationService);
+        orderProcessor.processOrder(new Order("Alice", "Laptop", 1200.00));
+
+        OrderProcessor specialOrderProcessor = new SpecialOrderProcessor(paymentProcessor, notificationService);
+        specialOrderProcessor.processOrder(new Order("Bob", "Special Laptop", 1500.00));
     }
 }

@@ -1,4 +1,4 @@
-    package practice.oop.demo;
+package practice.oop.demo;
 
 public class OrderWrong {
     private String customerName;
