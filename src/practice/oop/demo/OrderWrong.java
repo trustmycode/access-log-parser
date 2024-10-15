@@ -45,6 +45,10 @@ class SpecialOrder extends OrderWrong {
     public void processOrder() {
         throw new UnsupportedOperationException("Special orders are not processed the same way!");
     }
+
+    public void specialProcessOrder(){
+        System.out.println("Some kind of logic");
+    }
 }
 
 class PayPalPaymentWrong {
